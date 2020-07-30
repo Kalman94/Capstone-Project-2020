@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jul  6 01:08:49 2020
+
+@author: 30694
+"""
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jun 30 08:30:31 2020
+
+@author: 30694
+"""
+from PIL import Image
+import glob
+import pandas as pd
+import os
+import re
+
+for image_path in glob.glob("C:\\Users\\30694\\Documents\\GitHub\\DataFolder\\new_images\\*.png"):
+    name=str(os.path.basename(image_path))
+    image=Image.open(image_path)
+    new_image = image.resize((400, 400))
+    new_image.save('C:\\Users\\30694\\Downloads\\Capstone\\new_images\\resized400x400\\'+name)

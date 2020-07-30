@@ -1,0 +1,970 @@
+
+
+-- Code was inspired from this link https://ballardchalmers.com/2013/05/25/loading-images-into-sql-server/
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave01Gray' and xtype='U')
+DROP TABLE ImportedImages_wave01Gray
+GO
+
+CREATE TABLE ImportedImages_wave01Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave01Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_01\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave01Gray
+WHERE FileName IS NULL 
+GO
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave01Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_01\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave01Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+---------------------------------------------------------------------------------------------
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave02Gray' and xtype='U')
+DROP TABLE ImportedImages_wave02Gray
+GO
+
+CREATE TABLE ImportedImages_wave02Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave02Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_02\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave02Gray
+WHERE FileName IS NULL 
+GO
+
+
+
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave02Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_02\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave02Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave03Gray' and xtype='U')
+DROP TABLE ImportedImages_wave03Gray
+GO
+
+CREATE TABLE ImportedImages_wave03Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave03Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_03\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave03Gray
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave03Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_03\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave03Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave04Gray' and xtype='U')
+DROP TABLE ImportedImages_wave04Gray
+GO
+
+CREATE TABLE ImportedImages_wave04Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave04Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_04\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave04Gray
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave04Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_04\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave04Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave05Gray' and xtype='U')
+DROP TABLE ImportedImages_wave05Gray
+GO
+
+CREATE TABLE ImportedImages_wave05Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave05Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_05\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave05Gray
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave05Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_05\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave05Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave06Gray' and xtype='U')
+DROP TABLE ImportedImages_wave06Gray
+GO
+
+CREATE TABLE ImportedImages_wave06Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave06Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_06\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave06Gray
+WHERE FileName IS NULL 
+GO
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave06Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_06\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave06Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave07Gray' and xtype='U')
+DROP TABLE ImportedImages_wave07Gray
+GO
+
+CREATE TABLE ImportedImages_wave07Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave07Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_07\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave07Gray
+WHERE FileName IS NULL 
+GO
+
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave07Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_07\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave07Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave08Gray' and xtype='U')
+DROP TABLE ImportedImages_wave08Gray
+GO
+
+CREATE TABLE ImportedImages_wave08Gray( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave08Gray(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_08\Grayscale\* .png /B'
+
+DELETE FROM ImportedImages_wave08Gray
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave08Gray WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_08\Grayscale\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave08Gray
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+--RGB
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave01RGB' and xtype='U')
+DROP TABLE ImportedImages_wave01RGB
+GO
+
+CREATE TABLE ImportedImages_wave01RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave01RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_01\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave01RGB
+WHERE FileName IS NULL 
+GO
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave01RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_01\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave01RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave02RGB' and xtype='U')
+DROP TABLE ImportedImages_wave02RGB
+GO
+
+CREATE TABLE ImportedImages_wave02RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave02RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_02\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave02RGB
+WHERE FileName IS NULL 
+GO
+
+
+
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave02RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_02\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave02RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave03RGB' and xtype='U')
+DROP TABLE ImportedImages_wave03RGB
+GO
+
+CREATE TABLE ImportedImages_wave03RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave03RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_03\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave03RGB
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave03RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_03\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave03RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave04RGB' and xtype='U')
+DROP TABLE ImportedImages_wave04RGB
+GO
+
+CREATE TABLE ImportedImages_wave04RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave04RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_04\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave04RGB
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave04RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_04\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave04RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave05RGB' and xtype='U')
+DROP TABLE ImportedImages_wave05RGB
+GO
+
+CREATE TABLE ImportedImages_wave05RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave05RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_05\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave05RGB
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave05RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_05\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave05RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave06RGB' and xtype='U')
+DROP TABLE ImportedImages_wave06RGB
+GO
+
+CREATE TABLE ImportedImages_wave06RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave06RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_06\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave06RGB
+WHERE FileName IS NULL 
+GO
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave06RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_06\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave06RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave07RGB' and xtype='U')
+DROP TABLE ImportedImages_wave07RGB
+GO
+
+CREATE TABLE ImportedImages_wave07RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave07RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_07\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave07RGB
+WHERE FileName IS NULL 
+GO
+
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave07RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_07\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave07RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- Create the table to hold the images
+if exists (select * from sysobjects where name='ImportedImages_wave08RGB' and xtype='U')
+DROP TABLE ImportedImages_wave08RGB
+GO
+
+CREATE TABLE ImportedImages_wave08RGB( 
+      FileName sysname NULL, ImageData varbinary(max) NULL) 
+GO 
+
+-- Get images names from folder 
+INSERT INTO ImportedImages_wave08RGB(FileName) 
+EXEC xp_cmdshell'dir C:\Users\30694\Downloads\Capstone\new_images\wave_08\RGB\* .png /B'
+
+DELETE FROM ImportedImages_wave08RGB
+WHERE FileName IS NULL 
+GO
+
+
+
+-- Import all impages from folder
+DECLARE C CURSOR FOR 
+      (SELECT FileName FROM ImportedImages_wave08RGB WHERE ImageData IS NULL) 
+DECLARE @FileName sysname 
+DECLARE @Path sysname 
+DECLARE @SQL varchar(max)
+
+-- Loop through each file loading the images one by one
+OPEN C 
+FETCH NEXT FROM C INTO @FileName 
+WHILE (@@FETCH_STATUS <> -1) 
+BEGIN 
+  SET @Path = 'C:\Users\30694\Downloads\Capstone\new_images\wave_08\RGB\' + @FileName 
+  SET @SQL = 
+  'UPDATE ImportedImages_wave08RGB
+      SET ImageData = (SELECT bulkcolumn FROM OPENROWSET(
+      BULK ''' + @Path + ''', SINGLE_BLOB) AS IMAGE) 
+      WHERE FileName = ''' + @FileName + '''' 
+  EXEC (@sql) 
+  FETCH NEXT FROM C INTO @FileName 
+END 
+CLOSE C 
+DEALLOCATE C
+
+
+
+
+
+
+
+
+
+
+

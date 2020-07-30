@@ -1,0 +1,2053 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jan 25 03:38:34 2020
+
+@author: 30694
+"""
+
+
+#import time
+#Import All the Useful Libraries
+import cv2
+import re
+import numpy as np
+#np.setter(divide='ignore', invalid='ignore')
+#from matplotlib import pyplot as plt
+import scipy
+from scipy.spatial.distance import euclidean
+import glob
+import pandas as pd
+import os
+from skimage import io
+from skimage.feature import match_template
+import random
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn import tree
+from skimage.morphology import skeletonize
+from skimage import data, img_as_float
+import cv2 as cv
+from skimage.morphology import erosion, dilation, opening, closing, white_tophat
+from skimage.morphology import disk
+selem = disk(6)
+from skimage.morphology import black_tophat, skeletonize, convex_hull_image,area_closing
+from skimage.transform import radon, rescale
+from skimage.transform import iradon
+from skimage.util import random_noise
+import skimage
+from skimage.feature import canny
+from scipy import ndimage
+from skimage.transform import probabilistic_hough_line
+from sklearn.metrics import confusion_matrix
+from sklearn import preprocessing
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix
+from sklearn.metrics import classification_report
+import sys
+import math
+from skimage.color import rgb2gray
+from skimage.measure import moments_hu
+from scipy import misc
+from collections import defaultdict
+import operator, random
+from skimage.measure.entropy import shannon_entropy
+from skimage.filters.rank import entropy
+from skimage.filters import threshold_mean
+from skimage.transform import swirl
+from skimage.measure import compare_ssim as ssim
+from skimage.transform import warp
+#from skimage.exposure import match_histograms//
+from skimage.feature import register_translation
+#from skimage.transform import warp_polar, rotate//
+from skimage.util import img_as_float
+from skimage import data, segmentation, color
+from skimage.future import graph
+from skimage.restoration import (denoise_tv_chambolle, denoise_bilateral,  denoise_wavelet, estimate_sigma)
+from skimage import  img_as_float
+from skimage.util import random_noise
+from skimage.color.adapt_rgb import adapt_rgb, each_channel, hsv_value
+from skimage import filters
+from skimage.exposure import rescale_intensity
+from skimage.restoration import (denoise_tv_chambolle, denoise_bilateral,
+                                 denoise_wavelet, estimate_sigma)
+from skimage import  segmentation, color
+from skimage.future import graph
+from skimage.util import random_noise
+from skimage.feature import peak_local_max
+from skimage import data, img_as_float, color, exposure
+from skimage.restoration import unwrap_phase
+from skimage.data import page
+from skimage.filters import (threshold_otsu, threshold_niblack,
+                             threshold_sauvola)
+import matplotlib
+import time
+from skimage.color import rgb2gray
+from skimage.feature import hog
+from skimage.filters import sobel
+from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
+from skimage.segmentation import mark_boundaries
+from skimage.util import img_as_float
+from skimage.filters import sobel
+from skimage.measure import label
+from skimage.segmentation import slic, join_segmentations
+from skimage.morphology import watershed
+from skimage.color import label2rgb
+from skimage import data
+from skimage.feature import corner_harris, corner_subpix, corner_peaks
+from skimage.transform import warp, AffineTransform
+from skimage.draw import ellipse
+from scipy import ndimage as ndi
+
+from skimage.morphology import watershed, disk
+from skimage import data
+from skimage.filters import rank
+from skimage.util import img_as_ubyte
+from skimage.exposure import rescale_intensity
+from skimage.morphology import reconstruction
+#==================================Extra Libraries for the Machine Learning part ======================================
+
+
+#import matplotlib.pyplot as plt
+#import seaborn as sns
+from skimage.filters import unsharp_mask
+#import pandas_ml as pdml
+from sklearn import decomposition, linear_model, datasets # used in pca
+from sklearn.decomposition import KernelPCA , PCA, FactorAnalysis
+from sklearn.pipeline import Pipeline # used in pca
+
+#from sklearn.grid_search import GridSearchCV
+from sklearn.model_selection import GridSearchCV# used to find the optimal parameters for every classifier
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import classification_report,confusion_matrix #evaluation of classifiers
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import roc_curve, auc
+from sklearn.ensemble import (ExtraTreesClassifier, RandomForestClassifier,
+                              AdaBoostClassifier, GradientBoostingClassifier)
+from sklearn.covariance import ShrunkCovariance, LedoitWolf
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.tree import DecisionTreeClassifier
+from xgboost import XGBClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+import numpy as np
+from mlxtend.frequent_patterns import association_rules
+from mlxtend.preprocessing import OnehotTransactions
+from mlxtend.frequent_patterns import apriori
+import re
+from sklearn.externals.six import StringIO
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin/'
+from collections import Counter
+import seaborn as sns
+#import statsmodels.formula.api as sm
+from skimage import img_as_uint
+import numpy as np
+from scipy import ndimage as ndi
+
+from skimage.morphology import watershed
+from skimage.feature import peak_local_max
+
+
+#==========================================================================================
+@adapt_rgb(each_channel)
+def sobel_each(image):
+    return filters.sobel(image)
+
+#This function may prove useful to quickly plot at any time the original image along with the new processed one
+#def plot_comparison(original, filtered, filter_name):
+#
+#    fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(8, 4), sharex=True,
+#                                   sharey=True)
+#    ax1.imshow(original)
+#    #for grey images add ax1.imshow(original, cmap=plt.cm.gray)
+#    ax1.set_title('original')
+#    ax1.axis('off')
+#    ax2.imshow(filtered)
+#    ax2.set_title(filter_name)
+#    ax2.axis('off')
+#   
+   
+ 
+from skimage import data, img_as_float
+from skimage.segmentation import (morphological_chan_vese,
+                                  morphological_geodesic_active_contour,
+                                  inverse_gaussian_gradient,
+                                  checkerboard_level_set)
+from scipy.ndimage import gaussian_filter
+from skimage import data
+from skimage import img_as_float
+from skimage.morphology import reconstruction
+from scipy.cluster.vq import kmeans2
+from scipy import ndimage as ndi
+from skimage.feature import daisy
+from skimage import data
+from skimage import color
+from skimage.util.shape import view_as_windows
+from skimage.util import montage
+
+
+
+
+def store_evolution_in(lst):
+    """Returns a callback function to store the evolution of the level sets in
+    the given list.
+    """
+
+    def _store(x):
+        lst.append(np.copy(x))
+
+    return _store
+
+# MethodFunction it takes as an input our image which could be either rgb or grayscale and it returns a new processed image
+# It calls all the Machine Vision methods we are going to use for this project both for rgb and grayscale images    
+
+def shift_left(xy):
+    xy[:, 0] += 50
+    return xy
+
+def methodFunction(img,scenario):
+    selem = disk(6)
+    if scenario=='skeletonize': #Skeletonize scenarion for our grayscale Images
+        thresh = threshold_mean(img)
+        binary = img > thresh
+        sk = skeletonize(binary)
+        return sk
+
+    elif scenario=='noise': #noise addition scenario both for rgb and grayscale Images
+        sigma = 0.155
+        noisy = random_noise(img, var=sigma**2)
+        return noisy
+    elif scenario=='GaussianBlur': #standalone Gaussian Blur for our rgb Images
+        img_GaussianBlur = cv.GaussianBlur(img, ksize = (7, 7), sigmaX = 0)
+        return img_GaussianBlur
+
+    elif scenario=='ConvexHull':#Scikit Convex morphological  transformation for our grayscale images
+
+        img=np.invert(img)
+        chull = convex_hull_image(img)
+        return chull
+
+    elif scenario=='closing': #Scikit closing operation for our grayscale images
+        img=np.invert(img)
+        image2=closing(img,selem)
+        return image2
+    elif scenario=='blackTophat':#Scikit blacktophat operation for our grayscale images
+        image2=black_tophat(img, selem)
+        return image2
+    elif scenario=='areaClosing':#Scikit areaclosing operation for our grayscale images
+        closed_attr = area_closing(img, 165, connectivity=1)
+        return closed_attr
+   
+    elif scenario=='dilationn':#Scikit dilation operation for our grayscale images
+     img=np.invert(img)
+     image2=dilation(img, selem)
+     return image2
+
+  
+    elif scenario=='noisy': # Scikit function which applies random noise to an image
+     original = img_as_float(img)
+     sigma = 0.155
+     noisy = random_noise(original, var=sigma**2)
+     return noisy
+ # Τhe above functions applies also different scikit denoise filters
+    elif scenario=='denoise_bilateral':
+     original = img_as_float(img)
+     sigma = 0.155
+     noisy = random_noise(original, var=sigma**2)
+     image2=denoise_bilateral(noisy, sigma_color=0.05, sigma_spatial=15, multichannel=True)
+     return image2
+# esbisa to rescale_sigma=True
+    elif scenario=='denoise_wavelet':
+     original = img_as_float(img)
+     sigma = 0.155
+     noisy = random_noise(original, var=sigma**2)
+     image2=denoise_wavelet(noisy, multichannel=True)
+     return image2
+
+
+    elif scenario=='wrap': # low value filter using a global comparison operator for all the values less than 200
+     image_wrapped = np.angle(np.exp(1j * img))
+     return image_wrapped
+
+
+ 
+    elif scenario=='Minusdilated': # low value filter using a global comparison operator for all the values less than 200
+       image = img_as_float(img)
+       image = gaussian_filter(image, 1)
+       seed = np.copy(image)
+       seed[1:-1, 1:-1] = image.min()
+       mask = image
+       dilated = reconstruction(seed, mask, method='dilation')
+       Minus=image-dilated
+       
+
+       return Minus
+
+
+
+    elif scenario=='filterbank1': # only for grayscale
+      np.random.seed(42)
+      patch_shape = 8, 8
+      n_filters = 49
+      # -- filterbank1 on original image
+      img=np.float32(img)
+      patches1 = view_as_windows(img, patch_shape)
+      patches1 = patches1.reshape(-1, patch_shape[0] * patch_shape[1])[::8]
+      fb1, _ = kmeans2(patches1, n_filters, minit='points')
+      fb1 = fb1.reshape((-1,) + patch_shape)
+      fb1_montage = montage(fb1, rescale_intensity=True)
+      return fb1_montage
+ 
+ 
+ 
+    elif scenario=='filterbank3': # only for grayscale
+      img=np.float32(img)  
+      np.random.seed(42)
+      patch_shape = 8, 8
+      n_filters = 49
+      filteredimg = ndi.gaussian_filter(img, .5) - ndi.gaussian_filter(img, 1)
+      patches2 = view_as_windows(filteredimg, patch_shape)
+      patches2 = patches2.reshape(-1, patch_shape[0] * patch_shape[1])[::8]
+      fb2, _ = kmeans2(patches2, n_filters, minit='points')
+      fb2 = fb2.reshape((-1,) + patch_shape)
+      fb2_montage = montage(fb2, rescale_intensity=True)
+
+      return fb2_montage
+ 
+
+    elif scenario=='holes': # only for RGB
+            # Make segmentation using edge-detection and watershed.
+            img = rescale_intensity(img, in_range=(50, 200))
+            seed = np.copy(img)
+            seed[2:-2, 2:-2] = img.max()
+            mask = img
+            filled = reconstruction(seed, mask, method='erosion')
+            seed[1:-1, 1:-1] = img.min()
+            rec = reconstruction(seed, mask, method='dilation')
+            return img-filled
+
+       
+
+
+
+
+
+ 
+
+
+#Help function which returns different measures for a given contour
+
+def ContourProperties(cnt):
+    x,y,w,h = cv2.boundingRect(cnt)
+    aspect_ratio = float(w)/h
+    area = cv2.contourArea(cnt)
+    rect_area = w*h
+    extent = float(area)/rect_area
+    hull = cv2.convexHull(cnt)
+    hull_area = cv2.contourArea(hull)
+    if hull_area==0:
+        solidity=0
+    else:    
+        solidity = float(area)/hull_area
+    perimeter = cv2.arcLength(cnt,True)
+    equi_diameter = np.sqrt(4*area/np.pi)
+    (x,y),radius = cv2.minEnclosingCircle(cnt)
+    return aspect_ratio,extent,solidity,equi_diameter,area,perimeter,radius    
+    #chull = convex_hull_image(image)
+
+#Help function which returns the Blue,Red,Green and gray percentages contained in an image
+
+def get_average_colors(zoomImage):
+
+ img  = cv.cvtColor(np.array(zoomImage), cv.COLOR_RGB2BGR)
+ rows, cols, _ = img.shape
+
+ color_B = 0
+ color_G = 0
+ color_R = 0
+ color_N = 0 # neutral/gray color
+
+ for i in range(rows):
+     for j in range(cols):
+         k = img[i,j]
+         if k[0] > k[1] and k[0] > k[2]:
+             color_B = color_B + 1
+             continue
+         if k[1] > k[0] and k[1] > k[2]:
+             color_G = color_G + 1
+             continue        
+         if k[2] > k[0] and k[2] > k[1]:
+             color_R = color_R + 1
+             continue
+         color_N = color_N + 1
+
+ pix_total = rows * cols
+ Blue=color_B/pix_total
+ Green=color_G/pix_total
+ Red=color_R/pix_total
+ Gray=  color_N/pix_total
+ return Blue,Green,Red,Gray
+   
+
+
+
+#Useful function that calculates the average of a list
+def Average(lst):
+    return sum(lst) / len(lst)
+
+# featureExtraction function it takes as an input both rgb,grayscale images and returns either
+# a numerical attribute or python object,list depending on the inside scenario that is called for instace average_pixel_width
+# this function contains also scenarios that we did not use in this project due to techical reasons but of course this does not affect the py executable
+def featureExtraction(img,scenario):
+    if scenario=='average_pixel_width': #Get Average pixel width for any given image
+        image = np.float32(img)
+        pwidth=(np.mean(image))
+        return pwidth
+    if scenario=='daisy': #only for gray
+#        print(img.type)
+        img=np.uint8(img)
+#        img=np.float32(img)
+        descs = daisy(img, step=180, radius=3, rings=2, histograms=6,orientations=8, visualize=False)
+        descs_num = descs.shape[0] * descs.shape[1]
+        return (descs_num)
+   
+    if scenario=='localMaxima': #only for gray
+#        print(img.type)
+         im = img_as_float(img )
+         # image_max is the dilation of im with a 20*20 structuring element
+         # It is used within peak_local_max function
+         image_max = ndi.maximum_filter(im, size=20, mode='constant')
+         # Comparison between image_max and im to find the coordinates of local maxima
+         coordinates = peak_local_max(im, min_distance=20)
+         return len(coordinates)
+       
+   
+    if scenario=='cornerPeaks': # only for RGB
+            # Make segmentation using edge-detection and watershed.
+            # Sheared checkerboard
+            img = rgb2gray(img)
+            tform = AffineTransform(scale=(1.3, 1.1), rotation=1, shear=0.7, translation=(110, 30))
+            image = warp(img[:90, :90], tform.inverse, output_shape=(200, 310))
+            # Ellipse
+            rr, cc = ellipse(160, 175, 10, 100)
+            image[rr, cc] = 1
+            # Two squares
+            image[30:80, 200:250] = 1
+            image[80:130, 250:300] = 1
+            coords = corner_peaks(corner_harris(image), min_distance=5)
+            coords_subpix = corner_subpix(image, coords, window_size=13)
+            return len(coords)
+   
+   
+   
+   
+   
+   
+   
+
+    if scenario=='LiThreshold': #this is for grayscale
+#        thresholds = np.arange(np.min(img) + 1.5, np.max(img) - 1.5)
+#        entropies = [_cross_entropy(img, t) for t in thresholds]
+#        optimal_camera_threshold = thresholds[np.argmin(entropies)]
+        computed_Optimal=filters.threshold_li(img)
+        return computed_Optimal
+
+
+ # This is a very interesting scenario because it help us to detect special shapes (hexagons,eptagons,octagons) using contours
+ # we have observed that polygons which contain letters and number tend to increase the total corner number which is detected from the contours function  
+ #for instance if a hexagon contains 2 chemical symbols on it's bonds the total estimated corners will be 6+2=8
+# for this scenarion we apply different operations with purpose to isolate those polygons on our images  
+    if scenario=='contourMatching':
+        #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        img=np.uint8(img)
+        blur = cv2.GaussianBlur(img, (7, 7), 2)
+        h, w = img.shape[:2]
+        # Morphological gradient
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+        gradient = cv2.morphologyEx(blur, cv2.MORPH_GRADIENT, kernel)
+
+        lowerb = np.array([0, 0, 0])
+        upperb = np.array([15, 15, 15])
+        binary = cv2.inRange(gradient, lowerb, upperb)
+ 
+
+        for row in range(h):
+         if binary[row, 0] == 255:
+           cv2.floodFill(binary, None, (0, row), 0)
+         if binary[row, w-1] == 255:
+           cv2.floodFill(binary, None, (w-1, row), 0)
+
+        for col in range(w):
+         if binary[0, col] == 255:
+            cv2.floodFill(binary, None, (col, 0), 0)
+         if binary[h-1, col] == 255:
+            cv2.floodFill(binary, None, (col, h-1), 0)
+
+
+        foreground = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
+        foreground = cv2.morphologyEx(foreground, cv2.MORPH_CLOSE, kernel)
+
+
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17))
+        background = cv2.dilate(foreground, kernel, iterations=3)
+        unknown = cv2.subtract(background, foreground)
+ 
+
+        markers = cv2.connectedComponents(foreground)[1]
+        markers += 1  # Add one to all labels so that background is 1, not 0
+        markers[unknown==255] = 0  # mark the region of unknown with zero
+        markers = cv2.watershed(img, markers)
+
+        hue_markers = np.uint8(179*np.float32(markers)/np.max(markers))
+        blank_channel = 255*np.ones((h, w), dtype=np.uint8)
+        marker_img = cv2.merge([hue_markers, blank_channel, blank_channel])
+        marker_img = cv2.cvtColor(marker_img, cv2.COLOR_HSV2BGR)
+
+
+        labeled_img = img.copy()
+#        labeled_img = cv2.cvtColor( labeled_img, cv2.COLOR_BGR2GRAY)
+        labeled_img[markers>1] = marker_img[markers>1]  # 1 is background color
+        labeled_img = cv2.addWeighted(img, 0.5, labeled_img, 0.5, 0)
+
+
+        _,threshold = cv2.threshold(foreground, 110, 255,  
+                            cv2.THRESH_BINARY)
+   
+         # Detecting shapes in image by selecting region  
+         # with same colors or intensity.
+        contours,_=cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+   
+        octagon=0
+        hexagon=0
+        pentagon=0  
+        eptagon=0
+        # Searching through every region selected to  
+        # find the required polygon.
+        for cnt in contours :
+         area = cv2.contourArea(cnt)
+   
+        # Shortlisting the regions based on there area.
+         if area > 100:  
+           approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt, True), True)
+           # Checking if the no. of sides of the selected region is 7 and store the number of eptagons detected
+           if(len(approx) == 8):  
+             cv2.drawContours(img, [approx], 0, (0, 0, 255), 5)
+             octagon=octagon+1
+           if(len(approx) == 7):  
+             cv2.drawContours(img, [approx], 0, (0, 0, 255), 5)
+             eptagon=eptagon+1
+           if(len(approx) == 6):  
+             cv2.drawContours(img, [approx], 0, (0, 0, 255), 5)
+             hexagon=hexagon+1
+           
+           if(len(approx) == 5):  
+             cv2.drawContours(img, [approx], 0, (0, 0, 255), 5)
+             pentagon=pentagon+1
+   
+        # Showing the image along with outlined arrow. We need both grayscale and colored image
+     
+        return octagon,hexagon,pentagon,eptagon
+   
+   
+   
+   
+   # This is the Template Matching using the Scikit Library, the advantage is that it can distinguish more efficiently the different templates
+   #but also to detect local maxima peaks which can be displayed as very bright spots on a grayscale chart where the template has been detected
+    if scenario=='TemplateMatching1':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template1.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter
+   
+
+   
+    if scenario=='TemplateMatching2':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template2.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+    if scenario=='TemplateMatching3':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template3.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+
+    if scenario=='TemplateMatching4':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template4.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+#  
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+
+    if scenario=='TemplateMatching5':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template5.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+#
+#       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+##         highlight matched regions (plural)
+#         plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+#         print(templateCounter)
+
+#
+         return templateCounter  
+
+
+    if scenario=='TemplateMatching6':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template6.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+    if scenario=='TemplateMatching7':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template7.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+
+    if scenario=='TemplateMatching8':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template8.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+
+    if scenario=='TemplateMatching9':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template9.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+    if scenario=='TemplateMatching10':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template10.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+    if scenario=='TemplateMatching11':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template11.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+    if scenario=='TemplateMatching12':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template12.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+
+    if scenario=='TemplateMatching13':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template13.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+
+    if scenario=='TemplateMatching14':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template14.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+#
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+    if scenario=='TemplateMatching15':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template15.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+#       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching16':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template16.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+    if scenario=='TemplateMatching17':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template17.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+    if scenario=='TemplateMatching18':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template18.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+#       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching19':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template19.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+     
+        
+    if scenario=='TemplateMatching20':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template20.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter       
+    if scenario=='TemplateMatching21':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template21.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+    if scenario=='TemplateMatching22':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template22.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+
+    if scenario=='TemplateMatching23':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template23.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching24':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template24.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching25':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template25.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching26':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template26.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+  
+
+    if scenario=='TemplateMatching27':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template27.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching28':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template28.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching29':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template29.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching30':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template30.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter   
+
+
+    if scenario=='TemplateMatching31':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template31.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching32':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template32.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+
+    if scenario=='TemplateMatching33':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template33.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+    if scenario=='TemplateMatching34':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template34.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter  
+    if scenario=='TemplateMatching35':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template35.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter    
+     
+    if scenario=='TemplateMatching36':
+   #     img = rgb2gray(img)
+         img=np.float32(img)  
+         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template36.png",0)
+       
+         result = match_template(image, coin)
+         ij = np.unravel_index(np.argmax(result), result.shape)
+         x, y = ij[::-1]
+
+         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+
+       # produce a plot equivalent to the one in the docs
+#         plt.imshow(result)
+# highlight matched regions (plural)
+##plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+         templateCounter=len(peaks)
+
+#
+         return templateCounter          
+#    if scenario=='TemplateMatching5':
+#   #     img = rgb2gray(img)
+#         img=np.float32(img)  
+#         image =cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#         coin=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Template5.png",0)
+#       
+#         result = match_template(image, coin)
+#         ij = np.unravel_index(np.argmax(result), result.shape)
+#         x, y = ij[::-1]
+##
+#
+#
+#         result = match_template(image, coin,pad_input=True) #added the pad_input bool
+#         peaks = peak_local_max(result,min_distance=10,threshold_rel=0.7) # find our peaks
+#
+#       # produce a plot equivalent to the one in the docs
+##         plt.imshow(result)
+## highlight matched regions (plural)
+###plt.plot(peaks[:,1], peaks[:,0], 'o', markeredgecolor='r', markerfacecolor='none', markersize=10)
+#         templateCounter=len(peaks)
+#
+##
+#         return templateCounter        
+#   
+   # The Hough Circles scenario help us to detect the total number of circles in any given image
+   
+    if scenario=='HoughCircles':
+        img = rgb2gray(img)
+#        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+      #  ret,thresh1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+        img=np.uint8(img)
+#        img = (np.float32(img), cv2.COLOR_RGB2GRAY)
+        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1.2, 100)
+        if circles is not None:
+         circles = np.round(circles[0, :]).astype("int")
+         no_circles=len(circles)
+         return no_circles
+        else:
+         no_circles=0
+         return no_circles
+     
+    #Hough Lines using both OpenCV and Scikit library, we may use the Scikit Library and calculate the different distances between the lines detected(code exists for the distance detection)    
+    # for this 10 wave demonstration the Hough Lines couldn't run successfully
+    if scenario=='HoughLinesP':
+        edges = canny(img, 2, 1, 25)
+        lines = probabilistic_hough_line(edges, threshold=10, line_length=5,line_gap=3)
+        return len(lines)
+   
+    if scenario=='percent': #The percent scenario help us to calculate the total light and dark area percent on a grayscale image
+        num_dark_px    = sum(img[img < 150])
+        num_total_px   = img.shape[0] * img.shape[1]
+        dark_area_pcnt = num_dark_px / num_total_px
+        light_area_pcnt=1-dark_area_pcnt
+        return dark_area_pcnt,light_area_pcnt
+       
+    if scenario=='entropy': # Entropy function returns different Entropy measures on a grayscale image
+#        print(len(img.shape))
+        img = skimage.img_as_ubyte(np.clip(img, -1, 1))
+        shannonEntropy=shannon_entropy(img[:,:,0])
+        entropy2= entropy(img[:,:,0], disk(10))
+        return entropy2,shannonEntropy
+
+
+    if scenario=='ssim': #Structural similarity index(ssim) indicates on similarity of an image with another one
+        k = 0.2 # you could set any any real number
+        img=np.float32(img)
+        noise = np.ones_like(img) * k * (img.max() - img.min())
+        noise[np.random.random(size=noise.shape) > 0.5] *= -1
+        img_noise = img + noise # new image with noise
+        ssim_noise = ssim(img, img_noise,data_range=img_noise.max() - img_noise.min(), multichannel=True)
+        return ssim_noise  
+    if scenario=='get_blurrness_score': # We can get the blurness score for each image
+#        img=np.float32(img)
+#        img2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+  #      img2= rgb2gray(img)
+        img=np.uint8(img)
+        fm = cv.Laplacian(img, cv.CV_64F).var()
+        return fm
+ 
+    if scenario=='get_average_color2': # We can get the average color for each image, previous scenario might not be used
+         img=np.float32(img)
+         img  = cv.cvtColor(np.array(img), cv.COLOR_RGB2BGR)
+         rows, cols, _ = img.shape
+   
+         color_B = 0
+         color_G = 0
+         color_R = 0
+         color_N = 0 # neutral/gray color
+       
+         for i in range(rows):
+             for j in range(cols):
+                 k = img[i,j]
+                 if k[0] > k[1] and k[0] > k[2]:
+                     color_B = color_B + 1
+                     continue
+                 if k[1] > k[0] and k[1] > k[2]:
+                     color_G = color_G + 1
+                     continue        
+                 if k[2] > k[0] and k[2] > k[1]:
+                     color_R = color_R + 1
+                     continue
+                 color_N = color_N + 1
+       
+         pix_total = rows * cols
+         Blue=color_B/pix_total
+         Green=color_G/pix_total
+         Red=color_R/pix_total
+         Gray=  color_N/pix_total
+         return Blue,Green,Red,Gray
+
+    if scenario =='contourMoments': # The contour moments scenario can help us to detect different geometrical measures for the largest contour
+        img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+        ret,thresh = cv.threshold(img,127,255,0)
+        contours,hierarchy = cv.findContours(thresh,2,1)
+        cnt = contours[0]
+        area = cv.contourArea(cnt)
+        perimeter = cv.arcLength(cnt,True)
+        epsilon = 0.1*cv.arcLength(cnt,True)
+        approx = cv.approxPolyDP(cnt,epsilon,True)
+        M = cv.moments(cnt)
+        return M,area,perimeter,approx
+    if scenario=='keypointDetection': # This is a function which returns the total key points of interest in a given image
+        try:        
+            img = cv.imread(img,0)
+            fast = cv.FastFeatureDetector_create()
+            kp = fast.detect(img,None)
+            kp =len(kp)
+            return kp
+        except:
+            return 0
+
+    if scenario=='connectedComponents':# This function returns the total number of connectd components detected
+        labeled, nr_objects = ndimage.label(img)
+        return len(labeled),nr_objects
+   
+ 
+   
+   # Here we load the template image inside the function and we compare it with the image that is loaded
+   # inside that function, same applies for all the following templates
+    if scenario =='contourStar':
+        star=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\star.png",0)
+        ret, thresh = cv2.threshold(img, 127, 255,0)
+        ret, thresh2 = cv2.threshold(star, 127, 255,0)
+        contours,hierarchy = cv2.findContours(thresh,2,1)
+        cnt1 = contours[0]
+        contours,hierarchy = cv2.findContours(thresh2,2,1)
+        cnt2 = contours[0]
+        ret = cv2.matchShapes(cnt1,cnt2,1,0.0)
+        return (ret)
+   
+    if scenario =='contourO2':
+        star=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\O2.png",0)
+        ret, thresh = cv2.threshold(img, 127, 255,0)
+        ret, thresh2 = cv2.threshold(star, 127, 255,0)
+        contours,hierarchy = cv2.findContours(thresh,2,1)
+        cnt1 = contours[0]
+        contours,hierarchy = cv2.findContours(thresh2,2,1)
+        cnt2 = contours[0]
+        ret = cv2.matchShapes(cnt1,cnt2,1,0.0)
+        return (ret)
+   
+    if scenario =='contourNhexagon':
+        star=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Nhexagon.png",0)
+        ret, thresh = cv2.threshold(img, 127, 255,0)
+        ret, thresh2 = cv2.threshold(star, 127, 255,0)
+        contours,hierarchy = cv2.findContours(thresh,2,1)
+        cnt1 = contours[0]
+        contours,hierarchy = cv2.findContours(thresh2,2,1)
+        cnt2 = contours[0]
+        ret = cv2.matchShapes(cnt1,cnt2,1,0.0)
+        return (ret)
+   
+    if scenario =='contourHNCH3':
+        star=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\H3C.png",0)
+        ret, thresh = cv2.threshold(img, 127, 255,0)
+        ret, thresh2 = cv2.threshold(star, 127, 255,0)
+        contours,hierarchy = cv2.findContours(thresh,2,1)
+        cnt1 = contours[0]
+        contours,hierarchy = cv2.findContours(thresh2,2,1)
+        cnt2 = contours[0]
+        ret = cv2.matchShapes(cnt1,cnt2,1,0.0)
+        return (ret)
+   
+    if scenario =='contourCircle':
+        star=cv2.imread("C:\\Users\\30694\\Downloads\\Capstone\\Templates\\Circle.png",0)
+        ret, thresh = cv2.threshold(img, 127, 255,0)
+        ret, thresh2 = cv2.threshold(star, 127, 255,0)
+        contours,hierarchy = cv2.findContours(thresh,2,1)
+        cnt1 = contours[0]
+        contours,hierarchy = cv2.findContours(thresh2,2,1)
+        cnt2 = contours[0]
+        ret = cv2.matchShapes(cnt1,cnt2,1,0.0)
+        return (ret)
+
+globalist=[]
+df_list=[]
+z=[]
+
+# the method_generator function union all the previous functions, it call the the wavesFunction and the featureExtraction function with purpose
+# to automatically create new processed images and extract all the features that the featureExtraction function returns for each transformed image
+#and  the featureExtraction which returns numerical values for each specific feature
+
+#it gets as an input the rgb version of the image, the grayscale version of the image and the name of the image
+def method_generator (image_RGB,image_Gray,image_Skeletonize,image_ConvexHull,image_GaussianBlur,image_Closing,image_Noisy,image_Dilation,image_Blacktophat,image_DenoiseBilateral,image_DenoiseWavelet,image_AreaClosing,image_Holes,image_Filterbank1,image_Wrap,image_Filterbank3,image_MinusDilated, status):
+
+#loop through our 10 waves
+    for x in range(1,2):
+         TemplateScikit1=featureExtraction(image_RGB,'TemplateMatching1')
+         TemplateScikit2=featureExtraction(image_RGB,'TemplateMatching2')
+         TemplateScikit3=featureExtraction(image_RGB,'TemplateMatching3')
+         TemplateScikit4=featureExtraction(image_RGB,'TemplateMatching4')
+         TemplateScikit5=featureExtraction(image_RGB,'TemplateMatching5')
+         TemplateScikit6=featureExtraction(image_RGB,'TemplateMatching6')
+         TemplateScikit7=featureExtraction(image_RGB,'TemplateMatching7')
+         TemplateScikit8=featureExtraction(image_RGB,'TemplateMatching8')
+         TemplateScikit9=featureExtraction(image_RGB,'TemplateMatching9')
+         TemplateScikit10=featureExtraction(image_RGB,'TemplateMatching10')
+         TemplateScikit11=featureExtraction(image_RGB,'TemplateMatching11')
+         TemplateScikit12=featureExtraction(image_RGB,'TemplateMatching12')
+         TemplateScikit13=featureExtraction(image_RGB,'TemplateMatching13')
+         TemplateScikit14=featureExtraction(image_RGB,'TemplateMatching14')
+         TemplateScikit15=featureExtraction(image_RGB,'TemplateMatching15')
+         TemplateScikit16=featureExtraction(image_RGB,'TemplateMatching16')
+           
+         TemplateScikit17=featureExtraction(image_RGB,'TemplateMatching17')
+         TemplateScikit18=featureExtraction(image_RGB,'TemplateMatching18')
+         TemplateScikit19=featureExtraction(image_RGB,'TemplateMatching19')
+         TemplateScikit20=featureExtraction(image_RGB,'TemplateMatching20')
+         TemplateScikit21=featureExtraction(image_RGB,'TemplateMatching21')
+         TemplateScikit22=featureExtraction(image_RGB,'TemplateMatching22')
+         TemplateScikit23=featureExtraction(image_RGB,'TemplateMatching23')
+         TemplateScikit24=featureExtraction(image_RGB,'TemplateMatching24')
+         TemplateScikit25=featureExtraction(image_RGB,'TemplateMatching25')
+         TemplateScikit26=featureExtraction(image_RGB,'TemplateMatching26')
+         TemplateScikit27=featureExtraction(image_RGB,'TemplateMatching27')
+                                                                                                         
+         TemplateScikit28=featureExtraction(image_RGB,'TemplateMatching28')
+         TemplateScikit29=featureExtraction(image_RGB,'TemplateMatching29')
+         TemplateScikit30=featureExtraction(image_RGB,'TemplateMatching30')
+         TemplateScikit31=featureExtraction(image_RGB,'TemplateMatching31')
+         TemplateScikit32=featureExtraction(image_RGB,'TemplateMatching32')
+         TemplateScikit33=featureExtraction(image_RGB,'TemplateMatching33')
+         TemplateScikit34=featureExtraction(image_RGB,'TemplateMatching34')
+         TemplateScikit35=featureExtraction(image_RGB,'TemplateMatching35')
+         TemplateScikit36=featureExtraction(image_RGB,'TemplateMatching36')
+         
+
+#       
+       #================= #RGB Images======================================
+        #==Contour Moments==# 21
+         image_RGB_ContourMoments1,image_RGB_ContourMoments2,image_RGB_ContourMoments3,image_RGB_ContourMoments4=featureExtraction(image_RGB,'contourMoments')
+
+       
+        #== ContourMatching==# +24
+         octagon_image_RGB,hexagon_image_RGB,pentagon_image_RGB,eptagon_image_RGB=featureExtraction(image_RGB,'contourMatching')
+         octagon_GaussianBlur,hexagon_GaussianBlur,pentagon_GaussianBlur,eptagon_GaussianBlur=featureExtraction(image_GaussianBlur,'contourMatching')
+         octagon_Noisy,hexagon_Noisy,pentagon_Noisy,eptagon_Noisy=featureExtraction(image_Noisy,'contourMatching')
+         octagon_DenoiseBilateral,hexagon_DenoiseBilateral,pentagon_DenoiseBilateral,eptagon_DenoiseBilateral=featureExtraction(image_DenoiseBilateral,'contourMatching')
+         octagon_DenoiseWavelet,hexagon_DenoiseWavelet,pentagon_DenoiseWavelet,eptagon_DenoiseWavelet=featureExtraction(image_DenoiseWavelet,'contourMatching')
+         octagon_Wrap,hexagon_Wrap,pentagon_Wrap,eptagon_Wrap=featureExtraction(image_Wrap,'contourMatching')
+       
+  
+
+       
+       
+         #== Average Pixel Width==#
+         image_RGB_average_pixel_width= featureExtraction(image_RGB,'average_pixel_width')
+         image_GaussianBlur_average_pixel_width= featureExtraction(image_GaussianBlur,'average_pixel_width')
+         image_Noisy_average_pixel_width= featureExtraction(image_Noisy,'average_pixel_width')
+         image_DenoiseBilateral_average_pixel_width= featureExtraction(image_DenoiseBilateral,'average_pixel_width')
+         image_DenoiseWavelet_average_pixel_width= featureExtraction(image_DenoiseWavelet,'average_pixel_width')
+         image_Wrap_average_pixel_width=featureExtraction(image_Wrap,'average_pixel_width')
+         image_Hole_average_pixel_width= featureExtraction(image_Holes,'average_pixel_width')
+         image_MinusDilated_average_pixel_width= featureExtraction(image_MinusDilated,'average_pixel_width')
+ 
+      
+         
+          #== Get Average Color ==# Blue,Green,Red,Gray
+         image_RGB_Blue,image_RGB_Green,image_RGB_Red,image_RGB_Gray=featureExtraction(image_RGB,'get_average_color2')
+         image_GaussianBlur_Blue,image_GaussianBlur_Green,image_GaussianBlur_Red,image_GaussianBlur_Gray=featureExtraction(image_GaussianBlur,'get_average_color2')
+         image_Noisy_Blue,image_Noisy_Green,image_Noisy_Red,image_Noisy_Gray=featureExtraction(image_Noisy,'get_average_color2')
+         image_DenoiseBilateral_Blue,image_DenoiseBilateral_Green,image_DenoiseBilateral_Red,image_DenoiseBilateral_Gray=featureExtraction(image_DenoiseBilateral,'get_average_color2')
+         image_DenoiseWavelet_Blue,image_DenoiseWavelet_Green,image_DenoiseWavelet_Red,image_DenoiseWavelet_Gray=featureExtraction(image_DenoiseWavelet,'get_average_color2')
+         image_image_Wrap_Blue,image_image_Wrap_Green,image_image_Wrap_Red,image_image_Wrap_Gray=featureExtraction(image_Wrap,'get_average_color2')
+         image_Hole_Blue,image_Hole_Green,image_Hole_Red,image_Hole_Gray=featureExtraction(image_Holes,'get_average_color2')
+         image_MinusDilated_Blue,image_MinusDilated_Green,image_MinusDilated_Red,image_MinusDilated_Gray=featureExtraction(image_MinusDilated,'get_average_color2')
+     
+    
+           #== Get Blurrness Score==#
+         image_RGB_get_bluerrness_score= featureExtraction(image_RGB,'get_bluerrness_score')
+         image_GaussianBlur_get_bluerrness_score= featureExtraction(image_GaussianBlur,'get_bluerrness_score')
+         image_Noisy_get_bluerrness_score= featureExtraction(image_Noisy,'get_bluerrness_score')
+         image_DenoiseBilateral_get_bluerrness_score= featureExtraction(image_DenoiseBilateral,'get_bluerrness_score')
+         image_DenoiseWavelet_get_bluerrness_score= featureExtraction(image_DenoiseWavelet,'get_bluerrness_score')
+         image_Wrap_get_bluerrness_score= featureExtraction(image_Wrap,'get_bluerrness_score')
+         image_Hole_get_bluerrness_score= featureExtraction(image_Holes,'get_bluerrness_score')
+         image_MinusDilated_get_bluerrness_score= featureExtraction(image_MinusDilated,'get_bluerrness_score')
+ 
+         
+            #== LiThreshold==#
+         image_RGB_LiThreshold= featureExtraction(image_RGB,'LiThreshold')
+         image_GaussianBlur_LiThreshold=featureExtraction(image_GaussianBlur,'LiThreshold')
+         image_Noisy_LiThreshold= featureExtraction(image_Noisy,'LiThreshold')
+         image_DenoiseBilateral_LiThreshold= featureExtraction(image_DenoiseBilateral,'LiThreshold')
+         image_DenoiseWavelet_LiThreshold= featureExtraction(image_DenoiseWavelet,'LiThreshold')
+         image_Wrap_LiThreshold= featureExtraction(image_Wrap,'LiThreshold')
+         image_Hole_LiThreshold= featureExtraction(image_Holes,'LiThreshold')
+#         image_MinusDilated_LiThreshold= featureExtraction(OrientedGradient,'LiThreshold')
+      
+         
+           #== Connected Components==#
+         image_RGB_connectedComponents, image_RGB_ShannonconnectedComponents=featureExtraction(image_RGB,'connectedComponents')
+         image_GaussianBlur_connectedComponents,image_GaussianBlur_ShannonconnectedComponents=featureExtraction(image_GaussianBlur,'connectedComponents')
+         image_Noisy_connectedComponents,image_Noisy_ShannonconnectedComponents=featureExtraction(image_Noisy,'connectedComponents')
+         image_DenoiseBilateral_connectedComponents,image_DenoiseBilateral_ShannonconnectedComponents=featureExtraction(image_DenoiseBilateral,'connectedComponents')
+         image_DenoiseWavelet_connectedComponents,image_DenoiseWavelet_ShannonconnectedComponents=featureExtraction(image_DenoiseWavelet,'connectedComponents')
+         image_Wrap_connectedComponents,image_Wrap_ShannonconnectedComponents=featureExtraction(image_Wrap,'connectedComponents')
+         image_Hole_connectedComponents,image_Hole_ShannonconnectedComponents=featureExtraction(image_Holes,'connectedComponents')
+     
+         
+         
+         
+         
+               #== SSIM==#
+         image_RGB_ssim=featureExtraction(image_RGB,'ssim')
+         image_GaussianBlur_ssim=featureExtraction(image_GaussianBlur,'ssim')
+         image_Noisy_ssim=featureExtraction(image_Noisy,'ssim')
+         image_DenoiseBilateral_ssim=featureExtraction(image_DenoiseBilateral,'ssim')
+         image_DenoiseWavelet_ssim=featureExtraction(image_DenoiseWavelet,'ssim')
+         image_Wrap_ssim=featureExtraction(image_Wrap,'ssim')
+         image_Hole_ssim=featureExtraction(image_Holes,'ssim')
+#         image_MinusDilated_ssim=featureExtraction(image_MinusDilated,'ssim')
+     
+         
+         
+         
+                #== Entropy==#
+               
+         image_RGB_entropy, image_RGB_Shannonentropy=featureExtraction(image_RGB,'entropy')
+         image_GaussianBlur_entropy,image_GaussianBlur_Shannonentropy= featureExtraction(image_GaussianBlur,'entropy')
+         image_Noisy_entropy,image_Noisy_Shannonentropy= featureExtraction(image_Noisy,'entropy')
+         image_DenoiseBilateral_entropy,image_DenoiseBilateral_Shannonentropy= featureExtraction(image_DenoiseBilateral,'entropy')
+         image_DenoiseWavelet_entropy,image_DenoiseWavelet_Shannonentropy= featureExtraction(image_DenoiseWavelet,'entropy')
+         image_Wrap_entropy,image_Wrap_Shannonentropy= featureExtraction(image_Wrap,'entropy')
+
+         
+       
+        #=================================Gray Images================================================
+        #== Hough Circles ==#
+         image_Gray_HoughCircles=featureExtraction(image_Gray,'HoughCircles')
+         image_Skeletonize_HoughCircles=featureExtraction(image_Skeletonize,'HoughCircles')
+         image_ConvexHull_HoughCircles=featureExtraction(image_ConvexHull,'HoughCircles')
+         image_Closing_HoughCircles=featureExtraction(image_Closing,'HoughCircles')
+         image_Dilation_HoughCircles=featureExtraction(image_Dilation,'HoughCircles')
+         image_Blacktophat_HoughCircles=featureExtraction(image_Blacktophat,'HoughCircles')
+         image_AreaClosing_HoughCircles=featureExtraction(image_Gray,'HoughCircles')
+         image_Filterbank1_HoughCircles=featureExtraction(image_Filterbank1,'HoughCircles')
+         image_Filterbank3_HoughCircles=featureExtraction(image_Filterbank3,'HoughCircles')
+
+       
+       
+        #== Hough Lines ==#
+         image_Gray_HoughLines=featureExtraction(image_Gray,'HoughLinesP')
+         image_Skeletonize_HoughLines=featureExtraction(image_Skeletonize,'HoughLinesP')
+         image_ConvexHull_HoughLines=featureExtraction(image_ConvexHull,'HoughLinesP')
+         image_Closing_HoughLines=featureExtraction(image_Closing,'HoughLinesP')
+         image_Dilation_HoughLines=featureExtraction(image_Dilation,'HoughLinesP')
+         image_Blacktophat_HoughLines=featureExtraction(image_Blacktophat,'HoughLinesP')
+         image_AreaClosing_HoughLines=featureExtraction(image_Gray,'HoughLinesP')
+         image_Filterbank1_HoughLines=featureExtraction(image_Filterbank1,'HoughLinesP')
+         image_Filterbank3_HoughLines=featureExtraction(image_Filterbank3,'HoughLinesP')
+       
+        #== Keypoint Detection ==#
+         image_Gray_KeypointDetection=featureExtraction(image_Gray,'KeypointDetection')
+         image_Skeletonize_KeypointDetection=featureExtraction(image_Skeletonize,'KeypointDetection')
+         image_ConvexHull_KeypointDetection=featureExtraction(image_ConvexHull,'KeypointDetection')
+         image_Closing_KeypointDetection=featureExtraction(image_Closing,'KeypointDetection')
+         image_Dilation_KeypointDetection=featureExtraction(image_Dilation,'KeypointDetection')
+         image_Blacktophat_KeypointDetection=featureExtraction(image_Blacktophat,'KeypointDetection')
+         image_AreaClosing_KeypointDetection=featureExtraction(image_Gray,'KeypointDetection')
+         image_Filterbank1_KeypointDetection=featureExtraction(image_Filterbank1,'KeypointDetection')
+         image_Filterbank3_KeypointDetection=featureExtraction(image_Filterbank3,'KeypointDetection')
+       
+
+          #==Percent ==#
+         image_Gray_lightPercent,image_Gray_blackPercent=featureExtraction(image_Gray,'percent')
+
+ 
+       #==local maxima ==#
+         image_Gray_localmaxima=featureExtraction(image_Gray,'localmaxima')
+         image_Skeletonize_localmaxima=featureExtraction(image_Skeletonize,'localmaxima')
+         image_ConvexHull_localmaxima=featureExtraction(image_ConvexHull,'localmaxima')
+         image_Closing_localmaxima=featureExtraction(image_Closing,'localmaxima')
+         image_Dilation_localmaxima=featureExtraction(image_Dilation,'localmaxima')
+         image_Blacktophat_localmaxima=featureExtraction(image_Blacktophat,'localmaxima')
+         image_AreaClosing_localmaxima=featureExtraction(image_Gray,'localmaxima')
+         image_Filterbank1_localmaxima=featureExtraction(image_Filterbank1,'localmaxima')
+         image_Filterbank3_localmaxima=featureExtraction(image_Filterbank3,'localmaxima')
+        
+        #==corner peaks ==#
+         image_Gray_cornerPeaks=featureExtraction(image_Gray,'cornerPeaks')
+         image_Skeletonize_cornerPeaks=featureExtraction(image_Skeletonize,'cornerPeaks')
+         image_ConvexHull_cornerPeaks=featureExtraction(image_ConvexHull,'cornerPeaks')
+         image_Closing_cornerPeaks=featureExtraction(image_Closing,'cornerPeaks')
+         image_Dilation_cornerPeaks=featureExtraction(image_Dilation,'cornerPeaks')
+         image_Blacktophat_cornerPeaks=featureExtraction(image_Blacktophat,'cornerPeaks')
+         image_AreaClosing_cornerPeaks=featureExtraction(image_Gray,'cornerPeaks')
+         image_Filterbank1_cornerPeaks=featureExtraction(image_Filterbank1,'cornerPeaks')
+         image_Filterbank3_cornerPeaks=featureExtraction(image_Filterbank3,'cornerPeaks')
+     
+         
+      
+       
+ 
+
+
+      #  aspectRatioLargest,extentLargest,solidityLargest,equidiameterLargest,areaLargest,perimeterLargest,radiusLargest, aspectRatioSmallest,extentSmallest,soliditySmallest,equidiameterSmallest,areaSmallest,perimeterSmallest,radiusSmallest,MaxaspectRatioList,MaxextentList,MaxsolidityList,Maxequi_diameterList,MaxareaList, MaxperimeterList,MaxradiusList=featureExtraction(zoomImage,'contourProperties')
+         pattern = re.compile("[a-zA-Z0-9_.+-]+(inactive)[a-zA-Z0-9_.+-]+")
+         if pattern.match(status):
+            z=0
+         else:
+            z=1  
+
+ #for each wave pass all the features to list and then to a dataframe which in the end it will have 11 columns containing target column
+ #and 10 rows for each transformed image keypoints1,keypoints2,keypoints3,keypoints4,
+         templist=[ TemplateScikit1, TemplateScikit2,TemplateScikit3, TemplateScikit4, TemplateScikit5,TemplateScikit6, TemplateScikit7,TemplateScikit8, TemplateScikit9,\
+         TemplateScikit10,TemplateScikit11, TemplateScikit12, TemplateScikit13, TemplateScikit14, TemplateScikit15, TemplateScikit16,\
+         
+         
+         
+         
+         TemplateScikit17,TemplateScikit18,TemplateScikit19,TemplateScikit20,TemplateScikit21,TemplateScikit22,TemplateScikit23,TemplateScikit24,TemplateScikit25,TemplateScikit26, \
+         TemplateScikit27,TemplateScikit28,TemplateScikit29,TemplateScikit30,TemplateScikit31,TemplateScikit32,TemplateScikit33,TemplateScikit34,TemplateScikit35,TemplateScikit36, \
+       
+       #================= #RGB Images======================================
+        #==Contour Moments==#
+        image_RGB_ContourMoments2, image_RGB_ContourMoments3, \
+       
+       
+        #== ContourMatching==#
+         octagon_image_RGB,hexagon_image_RGB,pentagon_image_RGB,eptagon_image_RGB, octagon_GaussianBlur,hexagon_GaussianBlur,pentagon_GaussianBlur,eptagon_GaussianBlur,\
+         octagon_Noisy,hexagon_Noisy,pentagon_Noisy,eptagon_Noisy, octagon_DenoiseBilateral,hexagon_DenoiseBilateral,pentagon_DenoiseBilateral,eptagon_DenoiseBilateral,\
+         octagon_DenoiseWavelet,hexagon_DenoiseWavelet,pentagon_DenoiseWavelet,eptagon_DenoiseWavelet, octagon_Wrap,hexagon_Wrap,pentagon_Wrap,eptagon_Wrap,\
+
+       
+       
+       
+         #== Average Pixel Width==#
+         image_RGB_average_pixel_width,image_GaussianBlur_average_pixel_width,image_Noisy_average_pixel_width,image_DenoiseBilateral_average_pixel_width, image_DenoiseWavelet_average_pixel_width,\
+         image_Wrap_average_pixel_width,image_Hole_average_pixel_width, image_MinusDilated_average_pixel_width,\
+         
+         
+          #== Get Average Color ==# Blue,Green,Red,Gray
+         image_RGB_Blue,image_RGB_Green,image_RGB_Red,image_RGB_Gray, image_GaussianBlur_Blue,image_GaussianBlur_Green,image_GaussianBlur_Red,image_GaussianBlur_Gray,\
+         image_Noisy_Blue,image_Noisy_Green,image_Noisy_Red,image_Noisy_Gray, image_DenoiseBilateral_Blue,image_DenoiseBilateral_Green,image_DenoiseBilateral_Red,image_DenoiseBilateral_Gray,\
+         image_DenoiseWavelet_Blue,image_DenoiseWavelet_Green,image_DenoiseWavelet_Red,image_DenoiseWavelet_Gray,  image_image_Wrap_Blue,image_image_Wrap_Green,image_image_Wrap_Red,image_image_Wrap_Gray,\
+         image_Hole_Blue,image_Hole_Green,image_Hole_Red,image_Hole_Gray, image_MinusDilated_Blue,image_MinusDilated_Green,image_MinusDilated_Red,image_MinusDilated_Gray,\
+        
+         
+         
+           #== Get Blurrness Score==#
+         image_RGB_get_bluerrness_score, image_GaussianBlur_get_bluerrness_score, image_Noisy_get_bluerrness_score, image_DenoiseBilateral_get_bluerrness_score,\
+         image_DenoiseWavelet_get_bluerrness_score, image_Wrap_get_bluerrness_score, image_Hole_get_bluerrness_score, image_MinusDilated_get_bluerrness_score, \
+         
+         
+         
+            #== LiThreshold==#
+         image_RGB_LiThreshold, image_GaussianBlur_LiThreshold, image_Noisy_LiThreshold,image_DenoiseBilateral_LiThreshold,image_DenoiseWavelet_LiThreshold,\
+         image_Wrap_LiThreshold,image_Hole_LiThreshold,\
+              #== Connected Components==#
+         image_RGB_connectedComponents, image_RGB_ShannonconnectedComponents, image_GaussianBlur_connectedComponents,image_GaussianBlur_ShannonconnectedComponents,\
+         image_Noisy_connectedComponents,image_Noisy_ShannonconnectedComponents,image_DenoiseBilateral_connectedComponents,image_DenoiseBilateral_ShannonconnectedComponents,\
+         image_DenoiseWavelet_connectedComponents,image_DenoiseWavelet_ShannonconnectedComponents, image_Wrap_connectedComponents,image_Wrap_ShannonconnectedComponents,image_Hole_connectedComponents,image_Hole_ShannonconnectedComponents,\
+        
+         
+         
+               #== SSIM==#
+         image_RGB_ssim,image_GaussianBlur_ssim,image_Noisy_ssim,image_DenoiseBilateral_ssim,image_DenoiseWavelet_ssim, image_Wrap_ssim, image_Hole_ssim,\
+                #== Entropy==#
+               
+         image_RGB_Shannonentropy,image_GaussianBlur_Shannonentropy,image_Noisy_Shannonentropy,image_DenoiseBilateral_Shannonentropy,\
+         image_DenoiseWavelet_Shannonentropy,image_Wrap_Shannonentropy,\
+
+       
+
+       
+       
+        #=================================Gray Images================================================
+        #== Hough Circles ==#
+        image_Gray_HoughCircles, image_Skeletonize_HoughCircles,image_ConvexHull_HoughCircles,image_Closing_HoughCircles,\
+        image_Dilation_HoughCircles,image_Blacktophat_HoughCircles,image_AreaClosing_HoughCircles,image_Filterbank1_HoughCircles, image_Filterbank3_HoughCircles,\
+       
+       
+       
+       
+        #== Hough Lines ==#
+        image_Gray_HoughLines,image_Skeletonize_HoughLines,image_ConvexHull_HoughLines,image_Closing_HoughLines,\
+        image_Dilation_HoughLines,image_Blacktophat_HoughLines,image_AreaClosing_HoughLines,image_Filterbank1_HoughLines, image_Filterbank3_HoughLines,\
+       
+       
+        #== Keypoint Detection ==#
+        image_Gray_KeypointDetection,image_Skeletonize_KeypointDetection, image_ConvexHull_KeypointDetection,image_Closing_KeypointDetection,\
+        image_Dilation_KeypointDetection,image_Blacktophat_KeypointDetection,image_AreaClosing_KeypointDetection,image_Filterbank1_KeypointDetection,\
+        image_Filterbank3_KeypointDetection,\
+            #==Percent ==#
+        image_Gray_lightPercent,image_Gray_blackPercent, \
+       
+       
+        #==local maxima ==#
+        image_Gray_localmaxima,image_Skeletonize_localmaxima,image_ConvexHull_localmaxima,image_Closing_localmaxima,image_Dilation_localmaxima,image_Blacktophat_localmaxima,image_AreaClosing_localmaxima, image_Filterbank1_localmaxima,image_Filterbank3_localmaxima, 
+        #==corner peaks ==#
+        image_Gray_cornerPeaks,image_Skeletonize_cornerPeaks,image_ConvexHull_cornerPeaks,\
+        image_Closing_cornerPeaks, image_Dilation_cornerPeaks,image_Blacktophat_cornerPeaks,image_AreaClosing_cornerPeaks,image_Filterbank1_cornerPeaks,image_Filterbank3_cornerPeaks,\
+
+       
+
+        z]
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\Counter\\'
+    cv2.imwrite(str(path) + str(status) +'.png', image_Gray)
+    globalist.append(templist)
+    df = pd.DataFrame(globalist)
+    return df
+
+
+
+allImages=[]
+finaldf=pd.DataFrame()
+
+#load image from our path and generate variables for the rgb,gray version of the image + the name of the image
+for image_path in glob.glob("C:\\Users\\30694\\Documents\\GitHub\\DataFolder\\new_images\\*.png"):
+    image_RGB=cv2.imread(image_path)
+    image_Gray=cv2.imread(image_path,0)
+    status=str(os.path.basename(image_path))
+    
+    #Wave 1
+    image_Skeletonize=methodFunction(image_Gray,'skeletonize')
+    image_GaussianBlur=methodFunction(image_RGB,'GaussianBlur')
+    path = 'C:\\Users\\30694\\Downloads\\Capstone\\new_images\\wave_01\\RGB\\'
+
+    cv2.imwrite(str(path) + str(status)  , image_GaussianBlur)
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_01\\Grayscale\\'
+
+    io.imsave(str(path)+ str(status) , img_as_uint(np.float32(image_Skeletonize)))
+    
+    
+    
+    
+    #Wave 2
+  
+    image_ConvexHull=methodFunction(image_Gray,'ConvexHull')
+    image_DenoiseBilateral=methodFunction(image_RGB,'denoise_bilateral')
+    
+    path = 'C:\\Users\\30694\\Downloads\\Capstone\\new_images\\wave_02\\RGB\\'
+    
+    image_DenoiseBilateral = cv.convertScaleAbs(image_DenoiseBilateral, alpha=(255.0))
+    cv2.imwrite(str(path) + str(status)  , image_DenoiseBilateral)
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_02\\Grayscale\\'
+#    cv2.imwrite(str(path) + str(status) +'.png',    image_Skeletonize)
+    io.imsave(str(path)+ str(status) ,img_as_uint(     image_ConvexHull))
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #Wave 3
+    image_Noisy=methodFunction(image_RGB,'noisy')
+
+   
+    image_Blacktophat=methodFunction(image_Gray,'blackTophat')
+    path = 'C:\\Users\\30694\\Downloads\\Capstone\\new_images\\wave_03\\RGB\\'
+      
+      
+    image_Noisy= cv.convertScaleAbs(image_Noisy, alpha=(255.0))
+    cv2.imwrite(str(path) + str(status)  ,image_Noisy)
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_03\\Grayscale\\'
+#    cv2.imwrite(str(path) + str(status) +'.png',    image_Skeletonize)
+    io.imsave(str(path)+ str(status) ,img_as_uint(  image_Blacktophat))
+    
+    
+    
+    #Wave 4  
+    image_DenoiseWavelet=methodFunction(image_RGB,'denoise_wavelet')
+    image_Closing=methodFunction(image_Gray,'closing')
+    path = 'C:\\Users\\30694\\Downloads\\Capstone\\new_images\\wave_04\\RGB\\'
+    cv2.imwrite(str(path) + str(status)  , image_GaussianBlur)
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_04\\Grayscale\\'
+#    cv2.imwrite(str(path) + str(status) +'.png',    image_Skeletonize)
+    io.imsave(str(path)+ str(status) ,img_as_uint(  image_DenoiseWavelet))
+    #Wave 5
+    image_Dilation=methodFunction(image_Closing,'dilationn')
+
+   
+    image_AreaClosing=methodFunction(image_Gray,'areaClosing')
+#    plot_comparison(image_RGB,image_AreaClosing,'AreaClosing')
+    path = 'C:\\Users\\30694\\Downloads\\Capstone\\new_images\\wave_05\\RGB\\'
+    cv2.imwrite(str(path) + str(status)  ,   image_Dilation)
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_05\\Grayscale\\'
+
+    io.imsave(str(path)+ str(status) ,img_as_uint(  image_AreaClosing))
+#    
+#    
+    
+    #Wave 6
+    image_Holes=methodFunction(image_Gray,'holes')
+
+    image_Filterbank1=methodFunction(image_Gray,'filterbank1')
+#    image_Holes= cv.convertScaleAbs( image_Holes, alpha=(255.0))
+      
+    image_Filterbank1= cv.convertScaleAbs(image_Filterbank1, alpha=(255.0))
+      
+    path = 'C:\\Users\\30694\\Downloads\\Capstone\\new_images\\wave_06\\RGB\\'
+    cv2.imwrite(str(path) + str(status)  ,  image_Holes)
+            
+        
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_06\\Grayscale\\'
+
+    cv2.imwrite(str(path) + str(status)  ,  image_Filterbank1) 
+    
+    
+    
+    #Wave 7
+    image_Wrap=methodFunction(image_RGB,'wrap')
+
+    image_Wrap= cv.convertScaleAbs(image_Wrap, alpha=(255.0))
+   
+    image_Filterbank3=methodFunction(image_Gray,'filterbank3')
+    
+    path = 'C:\\Users\\30694\\Downloads\\Capstone\\new_images\\wave_07\\RGB\\'
+    cv2.imwrite(str(path) + str(status)  , image_Wrap)
+ 
+    io.imsave(str(path)+ str(status) ,img_as_uint( image_Wrap))
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_07\\Grayscale\\'
+
+    io.imsave(str(path)+ str(status) ,img_as_uint( image_Filterbank3))
+
+     #Wave 8
+
+    image_MinusDilated=methodFunction(image_RGB,'Minusdilated')
+
+
+    path = 'C:\\Users\\30694\Downloads\\Capstone\\new_images\\wave_08\\Grayscale\\'
+    image_MinusDilated = cv.convertScaleAbs(image_MinusDilated, alpha=(255.0))
+    cv2.imwrite(str(path) + str(status)  ,  image_MinusDilated)
+
+    status=str(os.path.basename(image_path))
+    start = time.time()
+    print(status)
+#create a dataframe called eikona which will contain all the 10 features for the 10 processed version of the original image
+    eikona = method_generator(image_RGB,image_Gray,image_Skeletonize,image_ConvexHull,image_GaussianBlur,image_Closing,image_Noisy,image_Dilation, image_Blacktophat,image_DenoiseBilateral,image_DenoiseWavelet,image_AreaClosing,image_Holes,image_Filterbank1,image_Wrap,image_Filterbank3,image_MinusDilated,status)
+# add each image to a list    
+    allImages.append(eikona)
+    end = time.time()
+    print(end - start)
+#    allImages=pd.concat(eikona,eikona)
+finaldf=allImages[-1]
+#rename last name to status active/inactive
+finaldf.columns = [*eikona.columns[:-1], 'status']
+#
+finaldf = finaldf.replace(np.nan, 0)
+
+
+
+finaldf.to_csv(r'C:\\Users\\30694\\Downloads\\Capstone\\Material\\finalee.csv')
+#

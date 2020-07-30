@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jun 30 08:30:31 2020
+
+@author: 30694
+"""
+
+import glob
+import pandas as pd
+import os
+import re
+paths,names,classi=[],[],[]
+for image_path in glob.glob("C:\\Users\\30694\\Downloads\\Capstone\\new_images\\resized400x400\\*.png"):
+    name=str(os.path.basename(image_path))
+    pattern = re.compile("[a-zA-Z0-9_.+-]+(inactive)[a-zA-Z0-9_.+-]+")
+    if pattern.match(name):
+            z=0
+    else:
+            z=1  
+    paths.append(image_path)
+    names.append(name)
+    classi.append(z)       
+            
+train_list = pd.DataFrame(
+    {
+     'id': names,
+     'classi': classi
+    })            
+
+train_list.to_csv('C:\\Users\\30694\\Downloads\\Capstone\\new_images\\resized400x400\\train.csv')
+#
+#paths,names,classi=[],[],[]
+#for image_path in glob.glob("C:\\Users\\30694\\Pictures\\new_images\\test\\*.png"):
+#    name=str(os.path.basename(image_path))
+#    pattern = re.compile("[a-zA-Z0-9_.+-]+(inactive)[a-zA-Z0-9_.+-]+")
+#    if pattern.match(name):
+#            z=0
+#    else:
+#            z=1  
+#    paths.append(image_path)
+#    names.append(name)
+#    classi.append(z)       
+#            
+#test_list = pd.DataFrame(
+#    {'paths': paths,
+#     'names': names,
+#     'classi': classi
+#    })            
+#       
+#test_list.to_csv('C:\\Users\\30694\\Pictures\\new_images\\train\\test.csv')
+#              

@@ -1,0 +1,124 @@
+
+import os
+import tensorflow as tf
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+# if tf.test.gpu_device_name():
+#     print('GPU found')
+# else:task = Task.init(project_name="autokeras", task_name="autokeras imdb example with scalars")
+#     print("No GPU found")
+
+from trains import Task
+task = Task.init(project_name="autokeras", task_name="Capstone 2020")
+from sklearn.metrics import classification_report
+import autokeras as ak
+import numpy as np 
+import pandas as pd 
+from glob import glob
+from skimage.io import imread
+import skimage.io as sio
+import os
+from natsort import natsorted
+import matplotlib.pyplot as plt
+# from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, roc_auc_score
+from skimage.transform import resize, rotate
+import warnings; warnings.filterwarnings("ignore")
+
+
+
+#CUDA_VISIBLE_DEVICES
+
+root_dir = "C:/Users/30694/Downloads/Capstone/new_images/resized400x400"
+train_dir = root_dir+"/"
+# test_dir  = root_dir + "/test/"
+csv_path  = root_dir + "/train.csv"
+# sub_path  = root_dir + "test2.csv"
+
+# loading images
+df   = pd.read_csv(csv_path)
+x    = np.array([ imread(train_dir+p)/255 for p in df.id.values])
+y    = df.classi.values
+
+
+import numpy as np
+import keras.backend as K
+import tensorflow_addons as tfa
+import tensorflow as tf
+from tensorflow import keras
+
+from tensorflow.keras.metrics import *
+
+
+from keras import backend as K
+
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+
+def create_f1():
+    def f1_function(y_true, y_pred):
+        y_pred_binary = tf.where(y_pred>=0.5, 1., 0.)
+        tp = tf.reduce_sum(y_true * y_pred_binary)
+        predicted_positives = tf.reduce_sum(y_pred_binary)
+        possible_positives = tf.reduce_sum(y_true)
+        return tp, predicted_positives, possible_positives
+    return f1_function
+
+
+class F1_score(keras.metrics.Metric):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs) # handles base args (e.g., dtype)
+        self.f1_function = create_f1()
+        self.tp_count = self.add_weight("tp_count", initializer="zeros")
+        self.all_predicted_positives = self.add_weight('all_predicted_positives', initializer='zeros')
+        self.all_possible_positives = self.add_weight('all_possible_positives', initializer='zeros')
+
+    def update_state(self, y_true, y_pred,sample_weight=None):
+        tp, predicted_positives, possible_positives = self.f1_function(y_true, y_pred)
+        self.tp_count.assign_add(tp)
+        self.all_predicted_positives.assign_add(predicted_positives)
+        self.all_possible_positives.assign_add(possible_positives)
+
+    def result(self):
+        precision = self.tp_count / self.all_predicted_positives
+        recall = self.tp_count / self.all_possible_positives
+        f1 = 2*(precision*recall)/(precision+recall)
+        return f1
+METRICS = [
+      keras.metrics.TruePositives(name='tp'),
+      keras.metrics.FalsePositives(name='fp'),
+      keras.metrics.TrueNegatives(name='tn'),
+      keras.metrics.FalseNegatives(name='fn'), 
+      keras.metrics.BinaryAccuracy(name='accuracy'),
+      keras.metrics.Precision(name='precision'),
+      keras.metrics.Recall(name='recall'),
+      keras.metrics.AUC(name='auc'),
+      F1_score(),
+     
+]
+
+
+#F-1 = 2 * (precision * recall) / (precision + recall)
+
+
+# splitting training dataset into train/validation
+from sklearn.model_selection import train_test_split
+x_train, x_val, y_train, y_val = train_test_split(x, y, test_size=0.20,stratify=y)
+# print(x_train.shape)
+# Initialize the ImageClassifier.
+clf = ak.ImageClassifier(max_trials=1 ,metrics=['Precision','Recall',F1_score()])
+# Search for the best model.
+
+# print(y_train)
+# from tensorflow import keras
+tensorboard_callback_train = keras.callbacks.TensorBoard(log_dir='log')
+# tensorboard_callback_train = keras.callbacks.TensorBoard(log_dir='log')
+clf.fit(x_train, y_train, validation_data=(x_val, y_val),shuffle=True,epochs=10,callbacks=[tensorboard_callback_train])
+# Evaluate on the testing data.
+
+
+# scalar_series = [random.randint(0,10) for i in range(10)]
+# logger.report_scalar(title='scalar metrics','series', value=scalar_series[iteration], iteration=0)
+model = clf.export_model()
+
+print(type(model))
+print(model.summary())
